@@ -56,12 +56,31 @@
         .name-col { text-align: left; font-weight: 700; color: var(--primary); background: white; position: sticky; left: 0; z-index: 5; border-right: 2px solid var(--bg); padding-left: 8px; width: 1%; white-space: nowrap; }
 
         input.cell { padding: 8px 2px; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 15px; width: 90%; }
-        input.rate-input { background: #fffdf0; border-color: #fcd34d; font-weight: bold; color: var(--gold-text); width: 50px; }
+        
+        select.rate-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: #fffdf0;
+            border: 1px solid #fcd34d;
+            color: var(--gold-text);
+            font-weight: bold;
+            padding: 8px 2px;
+            border-radius: 4px;
+            font-size: 15px;
+            width: 70px;
+            text-align: center;
+            text-align-last: center;
+            cursor: pointer;
+        }
 
-        /* Кольори індикації */
+        .target-select {
+            background-color: #f0f7ff !important;
+            border-color: #cbd5e1 !important;
+            color: #1e40af !important;
+        }
+
         .status-low { color: var(--danger) !important; }
         .status-ok { color: var(--success) !important; }
-
         .val-pos { color: var(--success); font-weight: bold; }
         .val-neg { color: var(--danger); font-weight: bold; }
         .group-header { font-weight: 800; font-size: 9px; color: #1e40af; background: #f0f7ff; }
@@ -75,7 +94,7 @@
             .header-panel { grid-template-columns: 1fr 1fr; }
             .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 10px; }
             table { min-width: 100% !important; border: 1px solid #000; }
-            input { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; }
+            input, select { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; appearance: none; }
             .print-footer { display: flex; }
             .status-low { color: #cc0000 !important; }
             .status-ok { color: #008800 !important; }
@@ -91,7 +110,7 @@
             <div class="input-group">
                 <div class="field">
                     <label>План</label>
-                    <input type="text" id="g-plan" value="9 000 000" oninput="formatInput(this); saveAndCalc()">
+                    <input type="text" id="g-plan" value="" oninput="formatInput(this); saveAndCalc()">
                 </div>
                 <div class="field">
                     <label>Факт</label>
@@ -109,7 +128,7 @@
             <div class="input-group">
                 <div class="field">
                     <label>Продажі</label>
-                    <input type="text" id="l-fact" value="150 000" oninput="formatInput(this); saveAndCalc()">
+                    <input type="text" id="l-fact" value="" oninput="formatInput(this); saveAndCalc()">
                 </div>
                 <div class="field">
                     <label>Екстра</label>
@@ -158,7 +177,7 @@
 
 <script>
     const employees = ["ГУЦ***", "КОВ***", "КРИ***", "ПІГ***", "СТЕ***", "ТАБ***"];
-    const STORAGE_KEY = 'kpi_store_color_v2';
+    const STORAGE_KEY = 'kpi_store_ios_select_v2';
 
     function parseFmt(str) {
         return parseFloat(String(str).replace(/\s/g, '').replace(',', '.')) || 0;
@@ -178,26 +197,53 @@
         el.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
     }
 
+    // Меню для ставок (2.60 - 3.10 крок 0.01)
+    function createRateSelect(id, selectedValue) {
+        let options = '';
+        for(let i = 260; i <= 310; i++) {
+            let val = (i / 100).toFixed(2);
+            let isSelected = (parseFloat(selectedValue).toFixed(2) === val) ? 'selected' : '';
+            options += `<option value="${val}" ${isSelected}>${val}%</option>`;
+        }
+        return `<select id="${id}" class="rate-select" onchange="saveAndCalc()">${options}</select>`;
+    }
+
+    // Меню для цілі (70 - 130 крок 5)
+    function createTargetSelect(id, selectedValue) {
+        let options = '';
+        for(let i = 70; i <= 130; i += 5) {
+            let isSelected = (parseInt(selectedValue) === i) ? 'selected' : '';
+            options += `<option value="${i}" ${isSelected}>${i}%</option>`;
+        }
+        return `<select id="${id}" class="rate-select target-select" onchange="saveAndCalc()">${options}</select>`;
+    }
+
     function init() {
         const tbody = document.getElementById('table-body');
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
 
         employees.forEach((name, i) => {
             const emp = saved.emps ? saved.emps[i] : null;
+            const savedRno = emp ? emp.rno : "2.85";
+            const savedRwi = emp ? emp.rwi : "2.85";
+            const savedTar = emp ? emp.tar : "100";
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="name-col">${name}</td>
-                <td><input type="text" id="f-${i}" class="cell" value="${emp ? fmt(emp.f) : '1 000 000'}" oninput="formatInput(this); saveAndCalc()"></td>
+                <td><input type="text" id="f-${i}" class="cell" value="${emp ? fmt(emp.f) : ''}" oninput="formatInput(this); saveAndCalc()"></td>
                 <td><input type="text" id="p-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="e-${i}" class="cell" value="${emp ? fmt(emp.e) : '0'}" oninput="formatInput(this); saveAndCalc()"></td>
                 <td><input type="text" id="fe-sum-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="fe-pct-${i}" class="cell readonly" readonly style="font-weight:800;"></td>
-                <td><input type="number" id="tar-${i}" class="cell" value="${emp ? emp.tar : 100}" oninput="saveAndCalc()"></td>
+                
+                <td>${createTargetSelect(`tar-${i}`, savedTar)}</td>
+                
                 <td><input type="text" id="dp-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="dc-${i}" class="cell readonly" readonly></td>
-                <td><input type="number" id="rno-${i}" class="cell rate-input" value="${emp ? emp.rno : 2.85}" step="0.01" oninput="saveAndCalc()"></td>
+                <td>${createRateSelect(`rno-${i}`, savedRno)}</td>
                 <td><input type="text" id="sno-${i}" class="cell readonly" readonly></td>
-                <td><input type="number" id="rwi-${i}" class="cell rate-input" value="${emp ? emp.rwi : 2.85}" step="0.01" oninput="saveAndCalc()"></td>
+                <td>${createRateSelect(`rwi-${i}`, savedRwi)}</td>
                 <td><input type="text" id="earn-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="total-${i}" class="cell readonly" readonly style="font-weight:800; color:var(--primary);"></td>
             `;
