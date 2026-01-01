@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Відомість</title>
+    <title>Відомість_Звіт</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -15,97 +15,84 @@
             --border: #e2e8f0;
             --gold-bg: #fef3c7;
             --gold-text: #92400e;
-            --gold-hover: #fde68a;
         }
 
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); padding: 10px; color: #1e293b; margin: 0; }
         .container { max-width: 100%; margin: 0 auto; }
 
-        /* Блок дати тільки для друку */
-        .print-date { display: none; margin-bottom: 15px; font-size: 24px; font-weight: bold; color: #000; }
+        /* Дата для PDF */
+        .print-date { display: none; margin-bottom: 10px; font-size: 24px; font-weight: bold; color: #000; }
 
         .controls { display: flex; justify-content: flex-start; gap: 15px; padding: 40px 2px 2px; }
         .btn { padding: 10px 18px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .print-btn { background: var(--primary); color: white; }
         .reset-btn { background: var(--gold-bg); color: #1e40af; border: 1px solid #fcd34d; }
-        .reset-btn:hover { background: var(--gold-hover); }
 
-        .header-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; font-size: 1.1em; }
-
-        @media (max-width: 768px) {
-            .header-panel { grid-template-columns: 1fr; }
-            .big-percent { font-size: 24px !important; }
-        }
-
+        .header-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); }
-        .title-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-size: 15px; margin-bottom: 10px; }
+        .title-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
         .bg-blue { background: #dbeafe; color: #1e40af; }
         .bg-gold { background: var(--gold-bg); color: var(--gold-text); }
 
         .input-group { display: flex; gap: 10px; align-items: flex-end; }
-        .field { flex: 1; min-width: 80px; }
-        .field label { display: block; font-size: 12px; font-weight: 600; color: #64748b; padding: 0px 10px; }
+        .field { flex: 1; }
+        .field label { display: block; font-size: 11px; font-weight: 600; color: #64748b; margin-bottom: 4px; }
 
         input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; font-weight: bold; box-sizing: border-box; }
-        input.readonly { background: #f0fff4; color: #334155; border: 1px solid transparent; }
+        input.readonly { background: #f0fff4; border: 1px solid transparent; }
+        .big-percent { font-size: 30px; font-weight: 800; }
 
-        .big-percent { font-size: 30px; font-weight: 800; transition: color 0.3s; }
-
-        .table-card { background: var(--white); border-radius: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; min-width: 1550px; font-size: 15px; }
+        .table-card { background: var(--white); border-radius: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 1400px; font-size: 14px; }
         th { background: #f8fafc; padding: 8px 4px; border: 1px solid var(--border); font-size: 10px; color: #475569; text-transform: uppercase; }
         td { padding: 4px; border: 1px solid #f1f5f9; text-align: center; }
 
-        .name-col { text-align: left; font-weight: 700; color: var(--primary); background: white; position: sticky; left: 0; z-index: 5; border-right: 2px solid var(--bg); padding-left: 8px; width: 1%; white-space: nowrap; }
+        .name-col { text-align: left; font-weight: 700; color: var(--primary); background: white; position: sticky; left: 0; z-index: 5; border-right: 2px solid var(--bg); padding-left: 8px; }
 
-        input.cell { padding: 8px 2px; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 15px; width: 90%; }
+        input.cell { padding: 6px 2px; text-align: center; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; width: 90%; }
 
         select.rate-select {
-            appearance: none;
-            -webkit-appearance: none;
-            background-color: #fffdf0;
-            border: 1px solid #fcd34d;
-            color: var(--gold-text);
-            font-weight: bold;
-            padding: 8px 2px;
-            border-radius: 4px;
-            font-size: 15px;
-            width: 75px;
-            text-align: center;
-            text-align-last: center;
-            cursor: pointer;
+            appearance: none; -webkit-appearance: none;
+            background-color: #fffdf0; border: 1px solid #fcd34d;
+            color: var(--gold-text); font-weight: bold; padding: 6px 2px;
+            border-radius: 4px; font-size: 14px; width: 75px; text-align: center;
         }
-
-        .target-select {
-            background-color: #f0f7ff !important;
-            border-color: #cbd5e1 !important;
-            color: #1e40af !important;
-        }
+        .target-select { background-color: #f0f7ff !important; border-color: #cbd5e1 !important; color: #1e40af !important; }
 
         .status-low { color: var(--danger) !important; }
         .status-ok { color: var(--success) !important; }
-        .val-pos { color: var(--success); font-weight: bold; }
-        .val-neg { color: var(--danger); font-weight: bold; }
         .group-header { font-weight: 800; font-size: 9px; color: #1e40af; background: #f0f7ff; }
 
+        /* НАЛАШТУВАННЯ ДЛЯ PDF (A4 Альбомний) */
         @media print {
-            @page { size: A4 landscape; margin: 5mm; }
-            body { background: white; padding: 0; zoom: 78%; }
-            .controls { display: none; }
-            .print-date { display: block; } /* Показуємо дату */
-            .header-panel { grid-template-columns: 1fr 1fr; }
-            .card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 10px; }
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                width: 100%;
+                transform: scale(0.98); /* Легке стиснення для гарантованого входу в межі */
+                transform-origin: top left;
+            }
+            .controls, .reset-btn { display: none !important; }
+            .print-date { display: block !important; }
 
-            /* Приховуємо +/- % та +/- грн (це 8-й та 9-й стовпці) */
+            /* Приховуємо колонки +/- */
             th:nth-child(8), td:nth-child(8),
             th:nth-child(9), td:nth-child(9) {
                 display: none !important;
             }
 
+            .card, .table-card { box-shadow: none !important; border: 1px solid #eee !important; }
             table { min-width: 100% !important; border: 1px solid #000; }
-            input, select { border: none !important; background: transparent !important; color: black !important; padding: 0 !important; appearance: none; }
-            .status-low { color: #cc0000 !important; }
-            .status-ok { color: #008800 !important; }
+            th { border: 1px solid #000 !important; color: black; }
+            td { border: 1px solid #ccc !important; color: black; }
+            input, select { border: none !important; background: transparent !important; color: black !important; -webkit-appearance: none; }
+            .name-col { position: static; border-right: 1px solid #ccc !important; }
         }
     </style>
 </head>
@@ -120,7 +107,7 @@
             <div class="input-group">
                 <div class="field">
                     <label>План</label>
-                    <input type="text" id="g-plan" value="" oninput="formatInput(this); saveAndCalc()">
+                    <input type="text" id="g-plan" oninput="formatInput(this); saveAndCalc()">
                 </div>
                 <div class="field">
                     <label>Факт</label>
@@ -134,11 +121,11 @@
         </div>
 
         <div class="card">
-            <span class="title-badge bg-gold">ЕКСТРА</span>
+            <span class="title-badge bg-gold">ЕКСТРА ПУЛ</span>
             <div class="input-group">
                 <div class="field">
                     <label>Продажі</label>
-                    <input type="text" id="l-fact" value="" oninput="formatInput(this); saveAndCalc()">
+                    <input type="text" id="l-fact" oninput="formatInput(this); saveAndCalc()">
                 </div>
                 <div class="field">
                     <label>Екстра</label>
@@ -156,44 +143,44 @@
         <table>
             <thead>
                 <tr>
-                    <th rowspan="2" class="name-col"></th>
-                    <th rowspan="2">ФАКТ</th>
-                    <th rowspan="2">ПЛАН</th>
-                    <th rowspan="2">ЕКСТРА</th>
-                    <th rowspan="2">ФАКТ+ЕКСТРА</th>
-                    <th rowspan="2">% ВИКОНАННЯ</th>
-                    <th rowspan="2">ЦІЛЬ %</th>
-                    <th rowspan="2">+/- %</th> <th rowspan="2">+/- грн</th> <th colspan="2" class="group-header">БЕЗ ЕКСТРА</th>
+                    <th rowspan="2" class="name-col">Прізвище</th>
+                    <th rowspan="2">Факт</th>
+                    <th rowspan="2">План</th>
+                    <th rowspan="2">Екстра</th>
+                    <th rowspan="2">Факт+Екстра</th>
+                    <th rowspan="2">% Вик.</th>
+                    <th rowspan="2">Ціль %</th>
+                    <th rowspan="2">+/- %</th>
+                    <th rowspan="2">+/- грн</th>
+                    <th colspan="2" class="group-header">БЕЗ ЕКСТРА</th>
                     <th colspan="3" class="group-header" style="background:#f0fff4;">ВІДОМІСТЬ</th>
                 </tr>
                 <tr>
                     <th class="group-header">%</th>
-                    <th class="group-header">СУМА</th>
+                    <th class="group-header">Сума</th>
                     <th class="group-header" style="background:#f0fff4;">%</th>
-                    <th class="group-header" style="background:#f0fff4;">ЕКСТРА</th>
-                    <th class="group-header" style="background:#f0fff4;">СУМА</th>
+                    <th class="group-header" style="background:#f0fff4;">Екстра</th>
+                    <th class="group-header" style="background:#f0fff4;">Сума</th>
                 </tr>
             </thead>
             <tbody id="table-body"></tbody>
         </table>
     </div>
+
     <div class="controls">
-        <button class="print-btn btn" onclick="preparePrint()">Зберегти звіт</button>
-        <button class="reset-btn btn" onclick="resetData()">Очистити дані</button>
+        <button class="print-btn btn" onclick="window.print()">
+            <span>💾</span> Зберегти як PDF (A4)
+        </button>
+        <button class="reset-btn btn" onclick="resetData()">Очистити</button>
     </div>
 </div>
 
 <script>
     const employees = ["ГУЦ***", "КОВ***", "КРИ***", "ПІГ***", "СТЕ***", "ТАБ***"];
-    const STORAGE_KEY = 'kpi_store_ios_select_v4';
+    const STORAGE_KEY = 'kpi_store_v5_final';
 
-    function parseFmt(str) {
-        return parseFloat(String(str).replace(/\s/g, '').replace(',', '.')) || 0;
-    }
-
-    function fmt(val) {
-        return Math.round(val).toLocaleString('uk-UA').replace(/,/g, ' ');
-    }
+    function parseFmt(str) { return parseFloat(String(str).replace(/\s/g, '').replace(',', '.')) || 0; }
+    function fmt(val) { return Math.round(val).toLocaleString('uk-UA').replace(/,/g, ' '); }
 
     function formatInput(el) {
         let cursor = el.selectionStart;
@@ -228,7 +215,7 @@
         const tbody = document.getElementById('table-body');
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
 
-        // Встановлюємо дату
+        // Форматування дати 22.06.2026
         const now = new Date();
         const d = String(now.getDate()).padStart(2, '0');
         const m = String(now.getMonth() + 1).padStart(2, '0');
@@ -237,10 +224,6 @@
 
         employees.forEach((name, i) => {
             const emp = saved.emps ? saved.emps[i] : null;
-            const savedRno = emp ? emp.rno : "2.85";
-            const savedRwi = emp ? emp.rwi : "2.85";
-            const savedTar = emp ? emp.tar : "100";
-
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="name-col">${name}</td>
@@ -248,15 +231,15 @@
                 <td><input type="text" id="p-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="e-${i}" class="cell" value="${emp ? fmt(emp.e) : '0'}" oninput="formatInput(this); saveAndCalc()"></td>
                 <td><input type="text" id="fe-sum-${i}" class="cell readonly" readonly></td>
-                <td><input type="text" id="fe-pct-${i}" class="cell readonly" readonly style="font-weight:800;"></td>
-                <td>${createTargetSelect(`tar-${i}`, savedTar)}</td>
+                <td><input type="text" id="fe-pct-${i}" class="cell readonly" readonly style="font-weight:bold;"></td>
+                <td>${createTargetSelect(`tar-${i}`, emp ? emp.tar : 100)}</td>
                 <td><input type="text" id="dp-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="dc-${i}" class="cell readonly" readonly></td>
-                <td>${createRateSelect(`rno-${i}`, savedRno)}</td>
+                <td>${createRateSelect(`rno-${i}`, emp ? emp.rno : 2.85)}</td>
                 <td><input type="text" id="sno-${i}" class="cell readonly" readonly></td>
-                <td>${createRateSelect(`rwi-${i}`, savedRwi)}</td>
+                <td>${createRateSelect(`rwi-${i}`, emp ? emp.rwi : 2.85)}</td>
                 <td><input type="text" id="earn-${i}" class="cell readonly" readonly></td>
-                <td><input type="text" id="total-${i}" class="cell readonly" readonly style="font-weight:800; color:var(--primary);"></td>
+                <td><input type="text" id="total-${i}" class="cell readonly" readonly style="font-weight:bold; color:var(--primary);"></td>
             `;
             tbody.appendChild(tr);
         });
@@ -293,8 +276,8 @@
             const f = parseFmt(document.getElementById(`f-${i}`).value);
             const e = parseFmt(document.getElementById(`e-${i}`).value);
             const t = parseFloat(document.getElementById(`tar-${i}`).value) || 0;
-            const rno = (parseFloat(document.getElementById(`rno-${i}`).value) || 0) / 100;
-            const rwi = (parseFloat(document.getElementById(`rwi-${i}`).value) || 0) / 100;
+            const rno = parseFloat(document.getElementById(`rno-${i}`).value) / 100;
+            const rwi = parseFloat(document.getElementById(`rwi-${i}`).value) / 100;
 
             totalF += f; usedE += e;
             const sFE = f + e;
@@ -306,19 +289,12 @@
 
             document.getElementById(`p-${i}`).value = fmt(indPlan);
             document.getElementById(`fe-sum-${i}`).value = fmt(sFE);
-
             const fePctEl = document.getElementById(`fe-pct-${i}`);
             fePctEl.value = pFE.toFixed(1) + '%';
             fePctEl.className = 'cell readonly ' + (pFE >= 100 ? 'status-ok' : 'status-low');
 
-            const dpEl = document.getElementById(`dp-${i}`);
-            dpEl.value = (dP > 0 ? '+' : '') + dP.toFixed(1) + '%';
-            dpEl.className = 'cell readonly ' + (dP >= 0 ? 'val-pos' : 'val-neg');
-
-            const dcEl = document.getElementById(`dc-${i}`);
-            dcEl.value = fmt(dC);
-            dcEl.className = 'cell readonly ' + (dC >= 0 ? 'val-pos' : 'val-neg');
-
+            document.getElementById(`dp-${i}`).value = (dP > 0 ? '+' : '') + dP.toFixed(1) + '%';
+            document.getElementById(`dc-${i}`).value = fmt(dC);
             document.getElementById(`sno-${i}`).value = fmt(sNo);
             document.getElementById(`earn-${i}`).value = fmt(sWi - sNo);
             document.getElementById(`total-${i}`).value = fmt(sWi);
@@ -327,23 +303,14 @@
         const totalG = totalF + lFact;
         document.getElementById('g-fact').value = fmt(totalG);
         const pctG = plan > 0 ? (totalG / plan) * 100 : 0;
-
         const gPctEl = document.getElementById('g-pct');
         gPctEl.innerText = pctG.toFixed(1) + "%";
         gPctEl.className = 'big-percent ' + (pctG >= 100 ? 'status-ok' : 'status-low');
-
         document.getElementById('l-pool').value = fmt(lFact);
         document.getElementById('l-remain').value = fmt(lFact - usedE);
     }
 
-    function preparePrint() {
-        window.print();
-    }
-
-    function resetData() {
-        if(confirm("Очистити дані?")) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
-    }
-
+    function resetData() { if(confirm("Очистити все?")) { localStorage.clear(); location.reload(); } }
     window.onload = init;
 </script>
 </body>
