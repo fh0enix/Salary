@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+print-btnзбе<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
@@ -21,7 +21,7 @@
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); padding: 10px; color: #1e293b; margin: 0; }
         .container { max-width: 100%; margin: 0 auto; }
 
-        .controls { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 15px; }
+        .controls { display: flex; justify-content: flex-start; gap: 15px; padding: 40px 2px 2px; }
         .btn { padding: 10px 18px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .print-btn { background: var(--primary); color: white; }
         .reset-btn { background: var(--gold-bg); color: var(--gold-text); border: 1px solid #fcd34d; }
@@ -85,11 +85,6 @@
 <body>
 
 <div class="container">
-    <div class="controls">
-        <button class="print-btn btn" onclick="window.print()">Зберегти Звіт</button>
-        <button class="reset-btn btn" onclick="resetData()">Очистити дані</button>
-    </div>
-
     <div class="header-panel">
         <div class="card">
             <span class="title-badge bg-blue">ВИКОНАННЯ ПЛАНУ</span>
@@ -154,6 +149,10 @@
             </thead>
             <tbody id="table-body"></tbody>
         </table>
+    </div>
+    <div class="controls">
+        <button class="print-btn btn" onclick="window.print()">Зберегти звіт</button>
+        <button class="reset-btn btn" onclick="resetData()">Очистити дані</button>
     </div>
 </div>
 
