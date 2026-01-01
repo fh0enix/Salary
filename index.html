@@ -269,15 +269,15 @@
         });
 
         const totalG = totalF + lFact;
-        document.getElementById('g-fact').value = fmt(totalG) + " ₴";
+        document.getElementById('g-fact').value = fmt(totalG);
         const pctG = plan > 0 ? (totalG / plan) * 100 : 0;
 
         const gPctEl = document.getElementById('g-pct');
         gPctEl.innerText = pctG.toFixed(1) + "%";
         gPctEl.className = 'big-percent ' + (pctG >= 100 ? 'status-ok' : 'status-low');
 
-        document.getElementById('l-pool').value = fmt(lFact) + " ₴";
-        document.getElementById('l-remain').value = fmt(lFact - usedE) + " ₴";
+        document.getElementById('l-pool').value = fmt(lFact);
+        document.getElementById('l-remain').value = fmt(lFact - usedE);
     }
 
     function resetData() {
