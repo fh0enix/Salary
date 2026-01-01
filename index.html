@@ -49,6 +49,8 @@
         input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; font-weight: bold; box-sizing: border-box; }
         input.readonly { background: #f0fff4; color: #334155; border: 1px solid transparent; }
 
+        input.kpi-input.empty {background: #fdf2f8; border-color: #f9a8d4;}
+
         .big-percent { font-size: 30px; font-weight: 800; transition: color 0.3s; }
 
         .table-card { background: var(--white); border-radius: 10px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -107,6 +109,11 @@
             .status-low { color: #cc0000 !important; }
             .status-ok { color: #008800 !important; }
         }
+        input.cell:placeholder-shown,
+        input.cell.empty {
+        background: #fdf2f8;
+        border-color: #f9a8d4;
+        }
     </style>
 </head>
 <body>
@@ -120,7 +127,7 @@
             <div class="input-group">
                 <div class="field">
                     <label>План</label>
-                    <input type="text" id="g-plan" value="" oninput="formatInput(this); saveAndCalc()">
+                    <input type="text" id="g-plan" class="kpi-input" value="" oninput="formatInput(this); saveAndCalc()">
                 </div>
                 <div class="field">
                     <label>Факт</label>
@@ -138,7 +145,7 @@
             <div class="input-group">
                 <div class="field">
                     <label>Продажі</label>
-                    <input type="text" id="l-fact" value="" oninput="formatInput(this); saveAndCalc()">
+                    <input type="text" id="l-fact" class="kpi-input" value="" oninput="formatInput(this); saveAndCalc()">
                 </div>
                 <div class="field">
                     <label>Екстра</label>
@@ -205,6 +212,16 @@
         el.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
     }
 
+    function markEmptyCells() {
+        document.querySelectorAll('input.cell:not(.readonly), input.kpi-input').forEach(el => {
+            if (parseFmt(el.value) === 0) {
+                el.classList.add('empty');
+            } else {
+                el.classList.remove('empty');
+            }
+        });
+    }
+
     function createRateSelect(id, selectedValue) {
         let options = '';
         for(let i = 250; i <= 310; i += 5) {
@@ -266,6 +283,7 @@
             document.getElementById('l-fact').value = fmt(saved.global.lFact);
         }
         calc();
+        markEmptyCells();
     }
 
     function saveAndCalc() {
@@ -334,6 +352,7 @@
 
         document.getElementById('l-pool').value = fmt(lFact);
         document.getElementById('l-remain').value = fmt(lFact - usedE);
+        markEmptyCells();
     }
 
     function preparePrint() {
