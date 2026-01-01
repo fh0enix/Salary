@@ -246,7 +246,7 @@
                 <td class="name-col">${name}</td>
                 <td><input type="text" id="f-${i}" class="cell" value="${emp ? fmt(emp.f) : ''}" oninput="formatInput(this); saveAndCalc()"></td>
                 <td><input type="text" id="p-${i}" class="cell readonly" readonly></td>
-                <td><input type="text" id="e-${i}" class="cell" value="${emp ? fmt(emp.e) : '0'}" oninput="formatInput(this); saveAndCalc()"></td>
+                <td><input type="text" id="e-${i}" class="cell" value="${emp ? fmt(emp.e) : ''}" oninput="formatInput(this); saveAndCalc()"></td>
                 <td><input type="text" id="fe-sum-${i}" class="cell readonly" readonly></td>
                 <td><input type="text" id="fe-pct-${i}" class="cell readonly" readonly style="font-weight:800;"></td>
                 <td>${createTargetSelect(`tar-${i}`, savedTar)}</td>
