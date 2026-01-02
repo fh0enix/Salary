@@ -318,7 +318,8 @@
             const sFE = f + e;
             const pFE = indPlan > 0 ? (sFE / indPlan) * 100 : 0;
             const dP = pFE - t;
-            const dC = sFE - indPlan;
+            const targetSum = indPlan * (t / 100);
+            const dC = sFE - targetSum;
             const sNo = f * rno;
             const sWi = sFE * rwi;
 
